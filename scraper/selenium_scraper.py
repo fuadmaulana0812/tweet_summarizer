@@ -67,8 +67,8 @@ class TwitterSelenium:
         for user in users:
             print(f"🔍 Scraping tweets for @{user}...")
             self.driver.get(f"https://twitter.com/{user}")
-            time.sleep(10)
-
+            WebDriverWait(self.driver, 300).until(lambda d: d.execute_script("return document.readyState") == "complete")
+            
             tweets = self.driver.find_elements(By.XPATH, '//article[@data-testid="tweet"]')
             user_tweets = []
 
