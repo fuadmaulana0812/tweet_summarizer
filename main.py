@@ -12,7 +12,7 @@ async def job():
     # ✅ Get current time 
     time_loc = timezone(timedelta(hours=-5))
     end_datetime = datetime.now(time_loc)
-    start_datetime = end_datetime - timedelta(hours=3)
+    start_datetime = end_datetime - timedelta(hours=4)
     # start_datetime = datetime(2025, 3, 22, 19, 0, 0, tzinfo=time_loc)
     # end_datetime = datetime(2025, 3, 23, 0, 0, 0, tzinfo=time_loc)
     
@@ -48,17 +48,15 @@ async def job():
 
 # asyncio.run(job())
 
-# ✅ Schedule the job at specific times (every 3 hours)
+# ✅ Schedule the job at specific times (every 4 hours)
 schedule.every().day.at("05:00").do(lambda: asyncio.run(job()))
-schedule.every().day.at("08:00").do(lambda: asyncio.run(job()))
-schedule.every().day.at("11:00").do(lambda: asyncio.run(job()))
-schedule.every().day.at("14:00").do(lambda: asyncio.run(job()))
+schedule.every().day.at("09:00").do(lambda: asyncio.run(job()))
+schedule.every().day.at("13:00").do(lambda: asyncio.run(job()))
 schedule.every().day.at("17:00").do(lambda: asyncio.run(job()))
-schedule.every().day.at("20:00").do(lambda: asyncio.run(job()))
-schedule.every().day.at("23:00").do(lambda: asyncio.run(job()))
-schedule.every().day.at("02:00").do(lambda: asyncio.run(job()))
+schedule.every().day.at("21:00").do(lambda: asyncio.run(job()))
+schedule.every().day.at("01:00").do(lambda: asyncio.run(job()))
 
-print("🕒 Scheduler started! Running job every 3 hours...")
+print("🕒 Scheduler started! Running job every 4 hours...")
 
 # ✅ Run the scheduler
 while True:
