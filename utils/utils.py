@@ -4,10 +4,10 @@ async def read_user():
     df = pd.read_excel('Twitter Accounts_DeSci AI Agent_210325.xlsx', skiprows=2)
 
     # Filter rows where "Twitter Account" starts with "https"
-    df_filtered = df[df["Twitter Account"].astype(str).str.startswith("https")]
+    df_filtered = df[df["Twitter Account"].astype(str).str.startswith("https")].copy()
 
     # Extract username from the "Twitter Account" URL
-    df_filtered["Username"] = df_filtered["Twitter Account"].str.extract(r"https://x\.com/([^/]+)")
+    df_filtered.loc[:, "Username"] = df_filtered["Twitter Account"].str.extract(r"https://x\.com/([^/]+)")
 
     # Convert the usernames to a list
     user_list = df_filtered["Username"].tolist()
