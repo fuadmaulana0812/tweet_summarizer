@@ -24,9 +24,13 @@ class TwitterSelenium:
         options = Options()
         options.add_argument("--headless")  
         options.add_argument("--no-sandbox")  
-        options.add_argument("--disable-dev-shm-usage")  
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-blink-features=AutomationControlled")  
+        options.add_argument("--disable-extensions")
+        options.add_argument("--disable-features=IsolateOrigins,site-per-process")
         options.add_argument("--disable-gpu")  
         options.add_argument("--window-size=1920,1080")  
+        options.add_argument("--start-maximized")
         options.add_argument("--remote-debugging-port=9222")  
 
         # ✅ Manually specify Chromium binary
@@ -64,14 +68,14 @@ class TwitterSelenium:
             users = [users]
 
         all_tweets = {}
-        WIB = timezone(timedelta(hours=7))
+        time_loc = timezone(timedelta(hours=-5))
         seen_urls = set() # Track seen URLs to avoid duplicates
 
         for user in users:
             print(f"🔍 Scraping tweets for @{user}...")
             self.driver.get(f"https://twitter.com/{user}")
-            # time.sleep(5)
-            WebDriverWait(self.driver, 10).until(lambda d: d.execute_script("return document.readyState") == "complete")
+            time.sleep(10)
+            # WebDriverWait(self.driver, 10).until(lambda d: d.execute_script("return document.readyState") == "complete")
             
             tweets = self.driver.find_elements(By.XPATH, '//article[@data-testid="tweet"]')
             user_tweets = []
@@ -85,7 +89,7 @@ class TwitterSelenium:
                     tweet_text = tweet_text_element.text
                     timestamp_element = tweet.find_element(By.XPATH, './/time')
                     tweet_time = timestamp_element.get_attribute("datetime")
-                    tweet_datetime = datetime.strptime(tweet_time, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc).astimezone(WIB)
+                    tweet_datetime = datetime.strptime(tweet_time, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc).astimezone(time_loc)
                     
                     # ✅ Extract tweet ID from the tweet link
                     tweet_link_element = tweet.find_element(By.XPATH, './/a[contains(@href, "/status/")]')
