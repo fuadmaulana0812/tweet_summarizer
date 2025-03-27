@@ -20,6 +20,7 @@ class TwitterSelenium:
         self.driver = None
 
     def setup_driver(self):
+        print("🚀 Initializing web driver...")
         options = Options()
         options.add_argument("--headless")  
         options.add_argument("--no-sandbox")  
@@ -34,6 +35,8 @@ class TwitterSelenium:
         # ✅ Set user agent (optional but correct format)
         options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.90 Safari/537.36")
         self.driver = webdriver.Chrome(service=Service("/usr/local/bin/chromedriver"), options=options)
+        # self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        print("✅ Web driver initialized!")
 
     def login(self):
         self.driver.get("https://twitter.com/login")
@@ -67,7 +70,8 @@ class TwitterSelenium:
         for user in users:
             print(f"🔍 Scraping tweets for @{user}...")
             self.driver.get(f"https://twitter.com/{user}")
-            WebDriverWait(self.driver, 300).until(lambda d: d.execute_script("return document.readyState") == "complete")
+            # time.sleep(5)
+            WebDriverWait(self.driver, 10).until(lambda d: d.execute_script("return document.readyState") == "complete")
             
             tweets = self.driver.find_elements(By.XPATH, '//article[@data-testid="tweet"]')
             user_tweets = []
